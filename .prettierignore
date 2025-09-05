@@ -12,7 +12,5 @@
 **/.gitignore
 **/.prettierignore
 /*.lock
-/*.json
-/*.config.*
 /*.d.ts
 /*.md
