@@ -1,0 +1,16 @@
+**/.git
+**/.svn
+**/.hg
+**/node_modules
+
+**/.next
+**/docker
+**/generated
+**/prisma
+
+**/.env
+**/.gitignore
+**/.prettierignore
+/*.lock
+/*.d.ts
+/*.md
