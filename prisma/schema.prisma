@@ -13,3 +13,10 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model UrlEntry {
+  id          BigInt   @id @default(autoincrement())
+  originalUrl String
+  slug        String   @unique
+  createdAt   DateTime @default(now())
+}
