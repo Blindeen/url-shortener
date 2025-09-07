@@ -1,9 +1,10 @@
-import { Input } from '@/components/ui/input';
+import { CreateShortUrlForm } from '@/features/url-shortener/CreateShortUrlForm';
 
 export default function Home() {
     return (
-        <div className='h-full flex items-center justify-center px-8'>
-            <Input placeholder='Enter URL' />
+        <div className='bg-light-silver flex h-full flex-col items-center justify-center gap-y-10'>
+            <h1 className='text-6xl select-none'>🔗</h1>
+            <CreateShortUrlForm />
         </div>
     );
 }
