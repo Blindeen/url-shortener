@@ -45,8 +45,8 @@ export function CreateShortUrlForm() {
 
     const onSubmit = async (formData: z.infer<typeof formSchema>) => {
         try {
-            const { url } = await shortenUrl(formData.url);
-            setShortenedUrl(url);
+            const response = await shortenUrl(formData.url);
+            setShortenedUrl(response.url);
             form.reset();
             toast.success('URL shortened successfully!');
         } catch {
