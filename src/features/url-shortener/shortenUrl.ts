@@ -12,7 +12,7 @@ export const shortenUrl = async (url: string) => {
     });
 
     if (!response.ok) {
-        throw new Error('Failed to shorten URL');
+        throw new Error(`Failed to shorten URL: ${response.status}`);
     }
 
     const data = (await response.json()) as ShortenUrlResponse;
