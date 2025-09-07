@@ -3,6 +3,7 @@
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,6 +15,8 @@ import {
     FormItem,
     FormMessage,
 } from '@/components/ui/form';
+
+import { shortenUrl } from './shortenUrl';
 
 const formSchema = z.object({
     url: z.url({
@@ -30,8 +33,13 @@ export function CreateShortUrlForm() {
         },
     });
 
-    const onSubmit = (formData: z.infer<typeof formSchema>) => {
-        console.log(formData);
+    const onSubmit = async (formData: z.infer<typeof formSchema>) => {
+        try {
+            const response = await shortenUrl(formData.url);
+            toast.success('URL shortened successfully!');
+        } catch {
+            toast.error('Failed to shorten URL. Please try again.');
+        }
     };
 
     return (
