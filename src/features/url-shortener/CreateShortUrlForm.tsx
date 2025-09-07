@@ -54,6 +54,16 @@ export function CreateShortUrlForm() {
         }
     };
 
+    const copyShortUrl = async () => {
+        if (!shortenedUrl) return;
+        try {
+            await navigator.clipboard.writeText(shortenedUrl);
+            toast.success('Shortened URL copied to clipboard!');
+        } catch {
+            toast.error('Writing to clipboard is not allowed.');
+        }
+    };
+
     return (
         <div className='flex h-28 w-5/6 flex-col gap-y-2 md:w-3/5 lg:w-4/12'>
             <Form {...form}>
@@ -94,7 +104,7 @@ export function CreateShortUrlForm() {
                             className='cursor-pointer bg-white'
                             placeholder='Shortened URL will appear up here'
                             value={shortenedUrl}
-                            onClick={() => console.log('clicked')}
+                            onClick={copyShortUrl}
                             readOnly
                         />
                     )}
