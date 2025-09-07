@@ -1,4 +1,4 @@
-import { CreateShortUrlForm } from '@/features/url-shortener/CreateShortUrlForm';
+import { CreateShortUrlForm } from '@/features/url-shortener';
 
 export default function Home() {
     return (
