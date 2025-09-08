@@ -1,6 +1,6 @@
 import { db } from '@/app/api/client';
 
-import { ShortenUrlResponse } from './type';
+import { ShortenUrlResponse } from './types';
 
 export const shortenUrl = async (url: string) => {
     const response = await fetch('/api/url-entry', {
