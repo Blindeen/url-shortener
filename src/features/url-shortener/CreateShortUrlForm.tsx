@@ -14,7 +14,7 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { ChevronRightIcon } from 'lucide-react';
+import { ChevronRightIcon, Loader2Icon } from 'lucide-react';
 import {
     Form,
     FormControl,
@@ -33,6 +33,7 @@ const formSchema = z.object({
 });
 
 export function CreateShortUrlForm() {
+    const [loading, setLoading] = useState(false);
     const [shortenedUrl, setShortenedUrl] = useState<string | undefined>(
         undefined
     );
@@ -44,6 +45,7 @@ export function CreateShortUrlForm() {
     });
 
     const onSubmit = async (formData: z.infer<typeof formSchema>) => {
+        setLoading(true);
         try {
             const response = await shortenUrl(formData.url);
             setShortenedUrl(response.url);
@@ -51,6 +53,8 @@ export function CreateShortUrlForm() {
             toast.success('URL shortened successfully!');
         } catch {
             toast.error('Failed to shorten URL. Please try again.');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -92,8 +96,13 @@ export function CreateShortUrlForm() {
                         variant='secondary'
                         size='icon'
                         type='submit'
+                        disabled={loading}
                     >
-                        <ChevronRightIcon />
+                        {loading ? (
+                            <Loader2Icon className='animate-spin' />
+                        ) : (
+                            <ChevronRightIcon />
+                        )}
                     </Button>
                 </form>
             </Form>
