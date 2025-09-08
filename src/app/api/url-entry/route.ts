@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
         });
     } catch (error) {
         return Response.json(
-            { error: 'Failed to save short URL in a database' },
+            { error: 'Failed to save short URL in the database' },
             { status: 500 }
         );
     }
