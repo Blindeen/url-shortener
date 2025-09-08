@@ -1,2 +1,2 @@
 export * from './CreateShortUrlForm';
-export * from './getOriginalUrl';
+export { getOriginalUrl } from './functions';

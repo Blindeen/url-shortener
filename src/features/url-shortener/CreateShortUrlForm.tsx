@@ -23,7 +23,7 @@ import {
     FormMessage,
 } from '@/components/ui/form';
 
-import { shortenUrl } from './shortenUrl';
+import { shortenUrl } from './functions';
 
 const formSchema = z.object({
     url: z.url({
