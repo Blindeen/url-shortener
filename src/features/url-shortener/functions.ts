@@ -25,7 +25,7 @@ export async function getOriginalUrl(slug: string) {
     });
 
     if (urlEntry === null) {
-        throw new Error('URL not found');
+        throw new Error(`The short URL not found for slug: ${slug}`);
     }
 
     return urlEntry.originalUrl;
