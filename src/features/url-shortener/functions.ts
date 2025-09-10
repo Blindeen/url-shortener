@@ -24,9 +24,5 @@ export async function getOriginalUrl(slug: string) {
         where: { slug: slug },
     });
 
-    if (urlEntry === null) {
-        throw new Error(`The short URL not found for slug: ${slug}`);
-    }
-
-    return urlEntry.originalUrl;
+    return urlEntry?.originalUrl;
 }
