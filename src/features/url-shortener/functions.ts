@@ -1,6 +1,6 @@
-interface ShortenUrlResponse {
-    url: string;
-}
+import { db } from '@/app/api/client';
+
+import { ShortenUrlResponse } from './types';
 
 export const shortenUrl = async (url: string) => {
     const response = await fetch('/api/url-entry', {
@@ -18,3 +18,11 @@ export const shortenUrl = async (url: string) => {
     const data = (await response.json()) as ShortenUrlResponse;
     return data;
 };
+
+export async function getOriginalUrl(slug: string) {
+    const urlEntry = await db.urlEntry.findUnique({
+        where: { slug: slug },
+    });
+
+    return urlEntry?.originalUrl;
+}
