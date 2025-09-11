@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 
-import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,7 +14,7 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { ChevronRightIcon, Loader2Icon } from 'lucide-react';
+import { Loader2Icon } from 'lucide-react';
 import {
     Form,
     FormControl,
@@ -30,6 +30,7 @@ const formSchema = z.object({
         protocol: /^https?$/,
         hostname: z.regexes.domain,
     }),
+    slug: z.string().max(32),
 });
 
 export function CreateShortUrlForm() {
@@ -41,18 +42,20 @@ export function CreateShortUrlForm() {
         resolver: zodResolver(formSchema),
         defaultValues: {
             url: '',
+            slug: '',
         },
     });
 
     const onSubmit = async (formData: z.infer<typeof formSchema>) => {
         setLoading(true);
         try {
-            const response = await shortenUrl(formData.url);
+            const response = await shortenUrl(formData.url, formData.slug);
             setShortenedUrl(response.url);
             form.reset();
             toast.success('URL shortened successfully!');
-        } catch {
-            toast.error('Failed to shorten URL. Please try again.');
+        } catch (error) {
+            const err = error as Error;
+            toast.error(err.message);
         } finally {
             setLoading(false);
         }
@@ -69,17 +72,17 @@ export function CreateShortUrlForm() {
     };
 
     return (
-        <div className='flex h-28 w-5/6 flex-col gap-y-2 md:w-3/5 lg:w-4/12'>
+        <div className='flex h-64 w-5/6 flex-col gap-y-8 md:w-3/5 lg:w-4/12'>
             <Form {...form}>
                 <form
-                    className='flex gap-x-2'
+                    className='flex flex-col items-center gap-y-2'
                     onSubmit={form.handleSubmit(onSubmit)}
                 >
                     <FormField
                         control={form.control}
                         name='url'
                         render={({ field }) => (
-                            <FormItem className='h-16 flex-1'>
+                            <FormItem className='h-16 w-full'>
                                 <FormControl>
                                     <Input
                                         className='bg-white'
@@ -91,17 +94,32 @@ export function CreateShortUrlForm() {
                             </FormItem>
                         )}
                     />
+                    <FormField
+                        control={form.control}
+                        name='slug'
+                        render={({ field }) => (
+                            <FormItem className='h-16 w-full'>
+                                <FormControl>
+                                    <Input
+                                        className='bg-white'
+                                        placeholder='Enter a suffix (optional)'
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                     <Button
-                        className='cursor-pointer'
-                        variant='secondary'
-                        size='icon'
+                        className='w-1/2 cursor-pointer'
+                        variant='default'
                         type='submit'
                         disabled={loading}
                     >
                         {loading ? (
                             <Loader2Icon className='animate-spin' />
                         ) : (
-                            <ChevronRightIcon />
+                            'Submit'
                         )}
                     </Button>
                 </form>
