@@ -1,2 +1,3 @@
 export * from './create-short-url-form';
-export { getOriginalUrl } from './functions';
+export { getUrlEntry } from './functions';
+export * from './types';

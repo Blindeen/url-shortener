@@ -5,23 +5,25 @@ import {
     RedirectType,
 } from 'next/navigation';
 
-import { getOriginalUrl } from '@/features/url-shortener';
+import { getUrlEntry } from '@/features/url-shortener';
 import { logger } from '@/lib/logger';
+
+import { UrlEntry } from '../../../generated/prisma';
 
 export default async function RedirectPage(props: PageProps<'/[slug]'>) {
     const { slug } = await props.params;
 
-    let originalUrl: string | undefined;
+    let urlEntry: UrlEntry | null;
     try {
-        originalUrl = await getOriginalUrl(slug);
+        urlEntry = await getUrlEntry(slug);
     } catch (error) {
         logger.error(`Error fetching original URL: ${error}`);
         redirect('/error', RedirectType.replace);
     }
 
-    if (originalUrl === undefined) {
+    if (urlEntry === null) {
         notFound();
     }
 
-    permanentRedirect(originalUrl, RedirectType.replace);
+    permanentRedirect(urlEntry.originalUrl, RedirectType.replace);
 }
