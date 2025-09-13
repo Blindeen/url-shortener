@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 import z from 'zod';
 
-import { db } from '../client';
+import { db } from '@/lib';
 import { logger } from '@/lib/logger';
 import { getUrlEntry } from '@/features/url-shortener';
 import { Slug } from '@/features/url-shortener';
@@ -22,10 +22,10 @@ export async function POST(request: NextRequest) {
         validatedBody = shortenUrlRequestSchema.parse(body);
     } catch (error) {
         const zodError = error as z.ZodError;
-        const errorMessage = zodError.issues[0].message;
-        logger.error(`Invalid request body to ${request.url}: ${errorMessage}`);
+        const errors = zodError.issues.map((issue) => issue.message);
 
-        return Response.json({ error: errorMessage }, { status: 400 });
+        logger.error(`Invalid request body to ${request.url}: ${errors}`);
+        return Response.json({ errors: errors }, { status: 400 });
     }
 
     let slug: Slug | undefined;
@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
     } catch (error) {
         logger.error(`Failed to process the given slug: ${error}`);
         return Response.json(
-            { error: 'Failed to process the given slug' },
+            { errors: ['Failed to process the given slug'] },
             { status: 500 }
         );
     }
@@ -46,7 +46,9 @@ export async function POST(request: NextRequest) {
         if (slug !== undefined && (await getUrlEntry(slug)) !== null) {
             return Response.json(
                 {
-                    error: 'Slug is already in use. Please choose another one',
+                    errors: [
+                        'Slug is already in use. Please choose another one',
+                    ],
                 },
                 { status: 409 }
             );
@@ -61,7 +63,7 @@ export async function POST(request: NextRequest) {
     } catch (error) {
         logger.error(`Failed to access the database: ${error}`);
         return Response.json(
-            { error: 'Unexpected error occurred' },
+            { errors: ['Unexpected error occurred'] },
             { status: 500 }
         );
     }
