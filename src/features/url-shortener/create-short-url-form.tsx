@@ -23,7 +23,7 @@ import {
     FormMessage,
 } from '@/components/ui/form';
 
-import { shortenUrl } from './functions';
+import { performRequest } from '@/lib/api';
 
 const formSchema = z.object({
     url: z.url({
@@ -33,12 +33,16 @@ const formSchema = z.object({
     slug: z.string().max(32),
 });
 
+type ShortUrlFormData = z.infer<typeof formSchema>;
+
+type ShortUrlResponse = { message: string; url: string };
+
 export function CreateShortUrlForm() {
     const [loading, setLoading] = useState(false);
     const [shortenedUrl, setShortenedUrl] = useState<string | undefined>(
         undefined
     );
-    const form = useForm<z.infer<typeof formSchema>>({
+    const form = useForm<ShortUrlFormData>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             url: '',
@@ -46,19 +50,23 @@ export function CreateShortUrlForm() {
         },
     });
 
-    const onSubmit = async (formData: z.infer<typeof formSchema>) => {
+    const onSubmit = async (formData: ShortUrlFormData) => {
         setLoading(true);
-        try {
-            const response = await shortenUrl(formData.url, formData.slug);
-            setShortenedUrl(response.url);
+
+        const response = await performRequest<
+            ShortUrlFormData,
+            ShortUrlResponse
+        >('/api/url-entry', 'POST', formData);
+
+        if (response.status === 'success') {
+            setShortenedUrl(response.data.url);
+            toast.success(response.data.message);
             form.reset();
-            toast.success('URL shortened successfully!');
-        } catch (error) {
-            const err = error as Error;
-            toast.error(err.message);
-        } finally {
-            setLoading(false);
+        } else if (response.status === 'api-error') {
+            response.data.errors.forEach((error) => toast.error(error));
         }
+
+        setLoading(false);
     };
 
     const copyShortUrl = async () => {
