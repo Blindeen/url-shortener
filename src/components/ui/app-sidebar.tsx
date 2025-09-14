@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { Home, LogInIcon } from 'lucide-react';
+import { Home, LogInIcon, UserPlus } from 'lucide-react';
 
 import {
     Sidebar,
@@ -17,17 +17,17 @@ const items = [
     {
         title: 'Home',
         url: '/',
-        icon: Home,
+        icon: <Home />,
     },
     {
         title: 'Register',
         url: '/registration',
-        icon: LogInIcon,
+        icon: <UserPlus />,
     },
     {
         title: 'Login',
         url: '/login',
-        icon: LogInIcon,
+        icon: <LogInIcon />,
     },
 ];
 
@@ -36,15 +36,23 @@ export function AppSidebar() {
         <Sidebar>
             <SidebarContent>
                 <SidebarGroup>
-                    <SidebarGroupLabel>URL shortener</SidebarGroupLabel>
+                    <SidebarGroupLabel className='gap-x-2 text-sm font-bold uppercase'>
+                        <span className='text-xl'>🔗</span>
+                        URL shortener
+                    </SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {items.map((item) => (
                                 <SidebarMenuItem key={item.title}>
-                                    <SidebarMenuButton asChild>
+                                    <SidebarMenuButton
+                                        className='min-h-10'
+                                        asChild
+                                    >
                                         <Link href={item.url}>
-                                            <item.icon />
-                                            <span>{item.title}</span>
+                                            {item.icon}
+                                            <span className='text-base'>
+                                                {item.title}
+                                            </span>
                                         </Link>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>

@@ -34,7 +34,7 @@ export default function RootLayout({
                 <SidebarProvider>
                     <AppSidebar />
                     <main className='flex w-full flex-col'>
-                        <SidebarTrigger />
+                        <SidebarTrigger className='mt-1 ml-1' />
                         {children}
                     </main>
                 </SidebarProvider>
