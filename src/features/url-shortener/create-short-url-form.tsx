@@ -80,7 +80,7 @@ export function CreateShortUrlForm() {
     };
 
     return (
-        <div className='flex h-64 w-5/6 flex-col gap-y-8 md:w-3/5 lg:w-4/12'>
+        <div className='flex h-64 w-5/6 flex-col gap-y-8 md:w-[45vw] lg:w-[35vw]'>
             <Form {...form}>
                 <form
                     className='flex flex-col items-center gap-y-2'
