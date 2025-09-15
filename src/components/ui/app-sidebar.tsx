@@ -16,26 +16,26 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 
+const items = [
+    {
+        title: 'Home',
+        url: '/',
+        icon: <Home />,
+    },
+    {
+        title: 'Register',
+        url: '/register',
+        icon: <UserPlus />,
+    },
+    {
+        title: 'Login',
+        url: '/login',
+        icon: <LogInIcon />,
+    },
+];
+
 export function AppSidebar() {
     const pathname = usePathname();
-
-    const items = [
-        {
-            title: 'Home',
-            url: '/',
-            icon: <Home />,
-        },
-        {
-            title: 'Register',
-            url: '/register',
-            icon: <UserPlus />,
-        },
-        {
-            title: 'Login',
-            url: '/login',
-            icon: <LogInIcon />,
-        },
-    ];
 
     return (
         <Sidebar variant='sidebar' collapsible='offcanvas'>
