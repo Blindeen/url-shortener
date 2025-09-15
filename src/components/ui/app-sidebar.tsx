@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 import { Home, LogInIcon, UserPlus } from 'lucide-react';
 
@@ -7,51 +10,56 @@ import {
     SidebarContent,
     SidebarGroup,
     SidebarGroupContent,
-    SidebarGroupLabel,
+    SidebarHeader,
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 
-const items = [
-    {
-        title: 'Home',
-        url: '/',
-        icon: <Home />,
-    },
-    {
-        title: 'Register',
-        url: '/registration',
-        icon: <UserPlus />,
-    },
-    {
-        title: 'Login',
-        url: '/login',
-        icon: <LogInIcon />,
-    },
-];
-
 export function AppSidebar() {
+    const pathname = usePathname();
+
+    const items = [
+        {
+            title: 'Home',
+            url: '/',
+            icon: <Home />,
+        },
+        {
+            title: 'Register',
+            url: '/register',
+            icon: <UserPlus />,
+        },
+        {
+            title: 'Login',
+            url: '/login',
+            icon: <LogInIcon />,
+        },
+    ];
+
     return (
-        <Sidebar>
+        <Sidebar variant='sidebar' collapsible='offcanvas'>
+            <SidebarHeader>
+                <span className='text-lg font-bold uppercase'>
+                    🔗 URL shortener
+                </span>
+            </SidebarHeader>
+
             <SidebarContent>
                 <SidebarGroup>
-                    <SidebarGroupLabel className='gap-x-2 text-sm font-bold uppercase'>
-                        <span className='text-xl'>🔗</span>
-                        URL shortener
-                    </SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
-                            {items.map((item) => (
-                                <SidebarMenuItem key={item.title}>
+                            {items.map(({ title, url, icon }) => (
+                                <SidebarMenuItem key={title}>
                                     <SidebarMenuButton
                                         className='min-h-10'
+                                        isActive={pathname === url}
                                         asChild
                                     >
-                                        <Link href={item.url}>
-                                            {item.icon}
+                                        <Link href={url}>
+                                            {icon}
                                             <span className='text-base'>
-                                                {item.title}
+                                                {title}
                                             </span>
                                         </Link>
                                     </SidebarMenuButton>
