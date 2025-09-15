@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 function NotFound({ description }: { description: string }) {
     return (
-        <div className='bg-light-silver flex h-full flex-col items-center justify-center gap-y-12'>
+        <div className='flex h-full flex-col items-center justify-center gap-y-12'>
             <Image
                 src='/not-found.svg'
                 alt='Not found image'
