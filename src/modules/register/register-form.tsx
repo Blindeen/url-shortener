@@ -62,6 +62,7 @@ export function RegisterForm() {
             <CardHeader>
                 <CardTitle>Register a new account</CardTitle>
             </CardHeader>
+
             <Form {...form}>
                 <form
                     className='flex flex-col gap-3'
@@ -108,6 +109,7 @@ export function RegisterForm() {
                             />
                         </div>
                     </CardContent>
+
                     <CardFooter className='flex-col gap-2'>
                         <Button
                             type='submit'

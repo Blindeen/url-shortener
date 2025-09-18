@@ -3,8 +3,8 @@ import z from 'zod';
 
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
-import { getUrlEntry } from '@/features/url-shortener';
-import { Slug } from '@/features/url-shortener';
+import { getUrlEntry } from '@/modules/url-shortener';
+import { Slug } from '@/modules/url-shortener';
 
 const shortenUrlRequestSchema = z.object({
     url: z.url({

@@ -1,6 +1,7 @@
 import { db } from '@/lib/db';
+import type { Slug } from './definitions';
 
-export const getUrlEntry = async (slug: string) => {
+export const getUrlEntry = async (slug: Slug) => {
     const urlEntry = await db.urlEntry.findUnique({
         where: { slug: slug },
     });
