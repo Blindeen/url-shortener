@@ -1,10 +1,10 @@
 'use server';
 
-import { cookies } from 'next/headers';
 import z from 'zod';
 import bcrypt from 'bcrypt';
 
 import { db } from '@/lib/db';
+import { setAuthCookie } from '@/lib/cookie';
 import { type ActionResponse } from '@/lib/server-action';
 import { registerUserSchema, type RegisterSuccess } from './definitions';
 
@@ -56,17 +56,9 @@ export async function registerUser(
         };
     }
 
-    // TODO: Export cookies to a utility function - cookie.ts
-    const cookieStore = await cookies();
-    const token = 'dummy-token'; //TODO: generate a JWT token and set it as a cookie
-    const cookieOptions = {
-        expires: undefined, //TODO: set an expiration date for the cookie
-        maxAge: undefined, //TODO: set a max age for the cookie
-        path: '/',
-        secure: process.env.NODE_ENV === 'production',
-        httpOnly: true,
-    };
-    cookieStore.set('token', token, cookieOptions);
+    //TODO: generate a JWT token and set it as a cookie
+    const jwtToken = 'dummy-token';
+    await setAuthCookie(jwtToken);
 
     return {
         status: 'success',
