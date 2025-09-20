@@ -18,7 +18,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    title: 'URL Shortener',
+    title: {
+        default: 'URL Shortener',
+        template: 'URL Shortener - %s',
+    },
     description: 'A simple URL shortener application',
 };
 

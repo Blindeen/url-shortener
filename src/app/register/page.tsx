@@ -1,4 +1,9 @@
+import type { Metadata } from 'next';
 import { RegisterForm } from '@/modules/register';
+
+export const metadata: Metadata = {
+    title: 'Register',
+};
 
 export default function RegistrationPage() {
     return (

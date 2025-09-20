@@ -1,4 +1,9 @@
+import type { Metadata } from 'next';
 import Image from 'next/image';
+
+export const metadata: Metadata = {
+    title: 'Error',
+};
 
 export default function ErrorPage() {
     return (
