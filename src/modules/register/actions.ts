@@ -2,6 +2,7 @@
 
 import { cookies } from 'next/headers';
 import z from 'zod';
+import bcrypt from 'bcrypt';
 
 import { db } from '@/lib/db';
 import { type ActionResponse } from '@/lib/server-action';
@@ -37,10 +38,15 @@ export async function registerUser(
             };
         }
 
+        const hashedPassword = await bcrypt.hash(
+            validatedBody.password,
+            parseInt(process.env.SALT_ROUNDS || '10', 10)
+        );
+
         newUser = await db.user.create({
             data: {
                 login: validatedBody.email,
-                password: validatedBody.password,
+                password: hashedPassword,
             },
         });
     } catch {

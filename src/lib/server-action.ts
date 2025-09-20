@@ -5,7 +5,7 @@ export type ActionResponse<T> =
       }
     | {
           status: 'action-error';
-          data: string[];
+          data: { errors: string[] };
       }
     | {
           status: 'unknown-error';
