@@ -1,7 +1,3 @@
-interface ErrorData {
-    errors: string[];
-}
-
 export type ActionResponse<T> =
     | {
           status: 'success';
@@ -9,7 +5,7 @@ export type ActionResponse<T> =
       }
     | {
           status: 'action-error';
-          data: ErrorData;
+          data: string[];
       }
     | {
           status: 'unknown-error';
