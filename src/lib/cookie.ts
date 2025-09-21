@@ -21,9 +21,9 @@ export const deleteCookie = async (name: string) => {
 };
 
 export const setAuthCookie = async (token: string) => {
+    const expirationTime = parseInt(process.env.JWT_EXPIRATION || '3600', 10);
     const cookieOptions = {
-        expires: undefined, //TODO: set an expiration date for the cookie based on max age from environment variables
-        maxAge: undefined, //TODO: set a max age for the cookie from environment variables
+        maxAge: expirationTime,
         path: '/',
         secure: process.env.NODE_ENV === 'production',
         httpOnly: true,

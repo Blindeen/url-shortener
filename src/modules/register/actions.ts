@@ -6,6 +6,7 @@ import { db } from '@/lib/db';
 import { setAuthCookie } from '@/lib/cookie';
 import { type ActionResponse } from '@/lib/server-action';
 import { hashPassword } from '@/lib/password';
+import { signJwt } from '@/lib/jwt';
 
 import { registerUserSchema, type RegisterSuccess } from './definitions';
 
@@ -23,7 +24,7 @@ export async function registerUser(
         const errors = zodError.issues.map((issue) => issue.message);
         return {
             status: 'action-error',
-            data: { errors },
+            data: { errors: errors },
         };
     }
 
@@ -53,8 +54,7 @@ export async function registerUser(
         };
     }
 
-    //TODO: generate a JWT token and set it as a cookie
-    const jwtToken = 'dummy-token';
+    const jwtToken = signJwt(newUser);
     await setAuthCookie(jwtToken);
 
     return {

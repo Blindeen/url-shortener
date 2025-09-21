@@ -53,6 +53,8 @@ export function RegisterForm() {
                 router.replace('/');
             } else if (response.status === 'action-error') {
                 response.data.errors.forEach((error) => toast.error(error));
+            } else {
+                toast.error(response.data);
             }
         });
     };
