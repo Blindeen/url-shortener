@@ -38,7 +38,7 @@ model User {
 
 model Group {
   id        BigInt   @id @default(autoincrement())
-  name      String
+  name      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
