@@ -7,6 +7,7 @@ import { setAuthCookie } from '@/lib/cookie';
 import { type ActionResponse } from '@/lib/server-action';
 import { hashPassword } from '@/lib/password';
 import { signJwt } from '@/lib/jwt';
+import { logger } from '@/lib/logger';
 
 import { registerUserSchema, type RegisterSuccess } from './definitions';
 
@@ -22,6 +23,8 @@ export async function registerUser(
     } catch (error) {
         const zodError = error as z.ZodError;
         const errors = zodError.issues.map((issue) => issue.message);
+
+        logger.warn('User registration validation failed', { errors: errors });
         return {
             status: 'action-error',
             data: { errors: errors },
@@ -34,10 +37,24 @@ export async function registerUser(
             where: { login: validatedBody.email },
         });
         if (existingUser) {
+            logger.warn(
+                'Attempt to register with an already registered email',
+                {
+                    email: validatedBody.email,
+                }
+            );
             return {
                 status: 'action-error',
                 data: { errors: ['Email is already registered'] },
             };
+        }
+
+        const clientsGroup = await db.group.findUnique({
+            where: { name: 'Clients' },
+        });
+        if (!clientsGroup) {
+            logger.error('Clients group not found in the database');
+            throw new Error('Clients group not found in the database');
         }
 
         const hashedPassword = await hashPassword(validatedBody.password);
@@ -45,9 +62,15 @@ export async function registerUser(
             data: {
                 login: validatedBody.email,
                 password: hashedPassword,
+                groups: {
+                    connect: {
+                        id: clientsGroup.id,
+                    },
+                },
             },
         });
-    } catch {
+    } catch (error) {
+        logger.error('Error occurred while creating user', { error });
         return {
             status: 'unknown-error',
             data: 'An unknown error occurred while creating the user',

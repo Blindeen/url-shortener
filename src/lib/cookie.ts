@@ -22,11 +22,12 @@ export const deleteCookie = async (name: string) => {
 
 export const setAuthCookie = async (token: string) => {
     const expirationTime = parseInt(process.env.JWT_EXPIRATION || '3600', 10);
-    const cookieOptions = {
+    const cookieOptions: Partial<ResponseCookie> = {
         maxAge: expirationTime,
         path: '/',
         secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
+        sameSite: 'lax',
     };
     await setCookie('auth_token', token, cookieOptions);
 };
