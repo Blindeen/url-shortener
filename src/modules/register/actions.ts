@@ -1,11 +1,12 @@
 'use server';
 
 import z from 'zod';
-import bcrypt from 'bcrypt';
 
 import { db } from '@/lib/db';
 import { setAuthCookie } from '@/lib/cookie';
 import { type ActionResponse } from '@/lib/server-action';
+import { hashPassword } from '@/lib/password';
+
 import { registerUserSchema, type RegisterSuccess } from './definitions';
 
 export async function registerUser(
@@ -38,11 +39,7 @@ export async function registerUser(
             };
         }
 
-        const hashedPassword = await bcrypt.hash(
-            validatedBody.password,
-            parseInt(process.env.SALT_ROUNDS || '10', 10)
-        );
-
+        const hashedPassword = await hashPassword(validatedBody.password);
         newUser = await db.user.create({
             data: {
                 login: validatedBody.email,
