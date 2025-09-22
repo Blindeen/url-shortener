@@ -48,9 +48,36 @@ model Group {
 
 model Permission {
   id        BigInt   @id @default(autoincrement())
-  name      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
   groups Group[]
+
+  module   Module @relation(fields: [moduleId], references: [id])
+  moduleId BigInt
+
+  operation   Operation @relation(fields: [operationId], references: [id])
+  operationId BigInt
+
+  @@unique([moduleId, operationId])
+}
+
+model Module {
+  id        BigInt   @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  permissions Permission[]
+}
+
+model Operation {
+  id        BigInt   @id @default(autoincrement())
+  read      Boolean
+  save      Boolean
+  delete    Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  permissions Permission[]
 }
