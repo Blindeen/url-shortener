@@ -1,12 +1,12 @@
 import jwt from 'jsonwebtoken';
 
-import { db } from './db';
+import { db } from '@/db';
 import type { User } from '../../generated/prisma';
 
 const secretKey = process.env.JWT_SECRET;
 const expirationTime = parseInt(process.env.JWT_EXPIRATION || '3600', 10);
 
-const decodeJwt = (token: string) => {
+export const decodeJwt = (token: string) => {
     if (!secretKey) {
         throw new Error('A secret key is required to verify the token');
     }
@@ -25,7 +25,9 @@ export const signJwt = (user: User) => {
 
     const payload = {
         email: user.login,
-        //TODO: add permissions or roles if needed
+        permissions: [
+            //TODO: add permissions
+        ],
     };
     const options = {
         issuer: process.env.SERVER_URL,

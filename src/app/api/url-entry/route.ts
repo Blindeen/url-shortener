@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 import z from 'zod';
 
-import { db } from '@/lib/db';
+import { db } from '@/db';
 import { logger } from '@/lib/logger';
 import { getUrlEntry } from '@/modules/url-shortener';
 import { Slug } from '@/modules/url-shortener';

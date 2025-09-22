@@ -1,4 +1,4 @@
-import { db } from '@/lib/db';
+import { db } from '@/db';
 import type { Slug } from './definitions';
 
 export const getUrlEntry = async (slug: Slug) => {

@@ -2,7 +2,7 @@
 
 import z from 'zod';
 
-import { db } from '@/lib/db';
+import { db } from '@/db';
 import { setAuthCookie } from '@/lib/cookie';
 import { type ActionResponse } from '@/lib/server-action';
 import { hashPassword } from '@/lib/password';
