@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 
 import { db } from '@/db';
-import type { User } from '../../generated/prisma';
+import type { UserWithGroups } from '@/db/user/definitions';
 
 const secretKey = process.env.JWT_SECRET;
 const expirationTime = parseInt(process.env.JWT_EXPIRATION || '3600', 10);
@@ -18,16 +18,14 @@ export const decodeJwt = (token: string) => {
     }
 };
 
-export const signJwt = (user: User) => {
+export const signJwt = (user: UserWithGroups) => {
     if (!secretKey) {
         throw new Error('A secret key is required to sign the token');
     }
 
     const payload = {
         email: user.login,
-        permissions: [
-            //TODO: add permissions
-        ],
+        groups: user.groups.map((group) => group.name),
     };
     const options = {
         issuer: process.env.SERVER_URL,

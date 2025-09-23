@@ -2,7 +2,13 @@
 
 import z from 'zod';
 
-import { db } from '@/db';
+import {
+    db,
+    createUser,
+    checkUserExists,
+    getUserWithGroups,
+    getGroupByName,
+} from '@/db';
 import { setAuthCookie } from '@/lib/cookie';
 import { type ActionResponse } from '@/lib/server-action';
 import { hashPassword } from '@/lib/password';
@@ -31,12 +37,10 @@ export async function registerUser(
         };
     }
 
-    let newUser;
+    let newUserWithGroups;
     try {
-        const existingUser = await db.user.findUnique({
-            where: { login: validatedBody.email },
-        });
-        if (existingUser) {
+        const doesUserExist = await checkUserExists(validatedBody.email);
+        if (doesUserExist) {
             logger.warn(
                 'Attempt to register with an already registered email',
                 {
@@ -49,26 +53,14 @@ export async function registerUser(
             };
         }
 
-        const clientsGroup = await db.group.findUnique({
-            where: { name: 'Clients' },
-        });
-        if (!clientsGroup) {
-            logger.error('Clients group not found in the database');
-            throw new Error('Clients group not found in the database');
-        }
-
+        const clientsGroup = await getGroupByName('Clients');
         const hashedPassword = await hashPassword(validatedBody.password);
-        newUser = await db.user.create({
-            data: {
-                login: validatedBody.email,
-                password: hashedPassword,
-                groups: {
-                    connect: {
-                        id: clientsGroup.id,
-                    },
-                },
-            },
-        });
+        const newUser = await createUser(
+            validatedBody.email,
+            hashedPassword,
+            clientsGroup.id
+        );
+        newUserWithGroups = await getUserWithGroups(newUser.id);
     } catch (error) {
         logger.error('Error occurred while creating user', { error });
         return {
@@ -77,7 +69,7 @@ export async function registerUser(
         };
     }
 
-    const jwtToken = signJwt(newUser);
+    const jwtToken = signJwt(newUserWithGroups);
     await setAuthCookie(jwtToken);
 
     return {
