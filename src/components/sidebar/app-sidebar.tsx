@@ -18,6 +18,8 @@ import {
 } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 
+import { logout } from './actions';
+
 export function AppSidebar({
     isUserAuthenticated,
 }: {
@@ -86,7 +88,7 @@ export function AppSidebar({
                     <SidebarMenu>
                         <SidebarMenuItem>
                             <SidebarMenuButton className='min-h-10' asChild>
-                                <Button variant='outline'>
+                                <Button variant='outline' onClick={logout}>
                                     <LogOut />
                                     <span className='text-base'>Logout</span>
                                 </Button>
