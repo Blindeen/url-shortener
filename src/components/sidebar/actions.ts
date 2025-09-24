@@ -5,5 +5,5 @@ import { deleteAuthCookie } from '@/lib/cookie';
 
 export const logout = async () => {
     await deleteAuthCookie();
-    redirect('/', RedirectType.replace);
+    redirect('/login', RedirectType.replace);
 };
