@@ -7,6 +7,8 @@ import { Toaster } from '@/components/ui/sonner';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/ui/app-sidebar';
 
+import { isUserAuthenticated } from '@/lib/auth';
+
 const geistSans = Geist({
     variable: '--font-geist-sans',
     subsets: ['latin'],
@@ -32,6 +34,7 @@ export default async function RootLayout({
 }>) {
     const cookieStore = await cookies();
     const defaultOpen = cookieStore.get('sidebar_state')?.value === 'true';
+    const isAuthenticated = await isUserAuthenticated();
 
     return (
         <html lang='en'>
@@ -39,7 +42,7 @@ export default async function RootLayout({
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
                 <SidebarProvider defaultOpen={defaultOpen}>
-                    <AppSidebar />
+                    <AppSidebar isUserAuthenticated={isAuthenticated} />
                     <main className='flex w-full flex-col'>
                         <SidebarTrigger className='mt-1 ml-1 cursor-pointer' />
                         <div className='flex-1'>{children}</div>
