@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { cookies } from 'next/headers';
-import './globals.css';
+import '../globals.css';
 
 import { Toaster } from '@/components/ui/sonner';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
@@ -41,13 +41,13 @@ export default async function RootLayout({
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
-                <SidebarProvider defaultOpen={defaultOpen}>
-                    <AppSidebar isUserAuthenticated={isAuthenticated} />
-                    <main className='flex w-full flex-col'>
+                <main className='flex w-full'>
+                    <SidebarProvider defaultOpen={defaultOpen}>
+                        <AppSidebar isUserAuthenticated={isAuthenticated} />
                         <SidebarTrigger className='mt-1 ml-1 cursor-pointer' />
-                        <div className='flex-1'>{children}</div>
-                    </main>
-                </SidebarProvider>
+                    </SidebarProvider>
+                    <div className='w-full flex-1'>{children}</div>
+                </main>
                 <Toaster />
             </body>
         </html>
