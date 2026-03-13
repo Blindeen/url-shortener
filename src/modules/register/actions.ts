@@ -1,9 +1,10 @@
 'use server';
 
+import { redirect, RedirectType } from 'next/navigation';
+
 import z from 'zod';
 
 import {
-    db,
     createUser,
     checkUserExists,
     getUserWithGroups,
@@ -71,6 +72,7 @@ export async function registerUser(
 
     const jwtToken = signJwt(newUserWithGroups);
     await setAuthCookie(jwtToken);
+    redirect('/', RedirectType.replace);
 
     return {
         status: 'success',

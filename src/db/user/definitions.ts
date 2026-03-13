@@ -1,4 +1,4 @@
-import { Prisma } from 'generated/prisma';
+import { Prisma } from '@generated/prisma';
 
 export const userWithGroupsArgs = Prisma.validator<Prisma.UserDefaultArgs>()({
     include: { groups: true },

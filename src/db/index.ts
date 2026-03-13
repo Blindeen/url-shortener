@@ -5,3 +5,5 @@ export * from './user/definitions';
 
 export * from './group/queries';
 export * from './group/definitions';
+
+export * from './module/queries';
