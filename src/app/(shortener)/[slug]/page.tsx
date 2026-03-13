@@ -8,7 +8,7 @@ import {
 import { getUrlEntry } from '@/modules/url-shortener';
 import { logger } from '@/lib/logger';
 
-import { UrlEntry } from '../../../generated/prisma';
+import { UrlEntry } from '../../../../generated/prisma';
 
 export default async function RedirectPage(props: PageProps<'/[slug]'>) {
     const { slug } = await props.params;

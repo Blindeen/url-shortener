@@ -83,6 +83,7 @@ export function AppSidebar({
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
+
             <SidebarFooter>
                 {isUserAuthenticated && (
                     <SidebarMenu>
