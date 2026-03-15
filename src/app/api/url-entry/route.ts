@@ -5,6 +5,7 @@ import { db } from '@/db';
 import { logger } from '@/lib/logger';
 import { getUrlEntry } from '@/modules/url-shortener';
 import { Slug } from '@/modules/url-shortener';
+import { STATIC_ROUTES } from '@/routes';
 
 const shortenUrlRequestSchema = z.object({
     url: z.url({
@@ -38,6 +39,13 @@ export async function POST(request: NextRequest) {
         return Response.json(
             { errors: ['Failed to process the given slug'] },
             { status: 500 }
+        );
+    }
+
+    if (slug !== undefined && Object.keys(STATIC_ROUTES).includes(slug)) {
+        return Response.json(
+            { errors: ['Slug cannot be one of keywords'] },
+            { status: 409 }
         );
     }
 

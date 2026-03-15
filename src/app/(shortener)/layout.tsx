@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+// import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import '../globals.css';
 
@@ -12,13 +12,13 @@ const geistMono = Geist_Mono({
     subsets: ['latin'],
 });
 
-export const metadata: Metadata = {
-    title: {
-        default: 'URL Shortener',
-        template: 'URL Shortener - %s',
-    },
-    description: 'A simple URL shortener application',
-};
+// export const metadata: Metadata = {
+//     title: {
+//         default: 'URL Shortener',
+//         template: 'URL Shortener - %s',
+//     },
+//     description: 'A simple URL shortener application',
+// };
 
 export default async function RootLayout({
     children,
