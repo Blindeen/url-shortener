@@ -1,8 +1,13 @@
+import type { Metadata } from 'next';
 import Image from 'next/image';
+
+export const metadata: Metadata = {
+    title: 'Error',
+};
 
 export default function ErrorPage() {
     return (
-        <div className='bg-light-silver flex h-full flex-col items-center justify-center gap-y-12'>
+        <div className='flex h-full flex-col items-center justify-center gap-y-12'>
             <Image
                 src='/server-error.svg'
                 alt='Server error image'

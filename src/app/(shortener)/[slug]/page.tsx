@@ -5,10 +5,10 @@ import {
     RedirectType,
 } from 'next/navigation';
 
-import { getUrlEntry } from '@/features/url-shortener';
+import { getUrlEntry } from '@/modules/url-shortener';
 import { logger } from '@/lib/logger';
 
-import { UrlEntry } from '../../../generated/prisma';
+import { UrlEntry } from '../../../../generated/prisma';
 
 export default async function RedirectPage(props: PageProps<'/[slug]'>) {
     const { slug } = await props.params;

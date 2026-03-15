@@ -1,0 +1,8 @@
+-- AlterTable
+ALTER TABLE "public"."Group" ALTER COLUMN "updatedAt" SET DEFAULT CURRENT_TIMESTAMP;
+
+-- AlterTable
+ALTER TABLE "public"."Permission" ALTER COLUMN "updatedAt" SET DEFAULT CURRENT_TIMESTAMP;
+
+-- AlterTable
+ALTER TABLE "public"."User" ALTER COLUMN "updatedAt" SET DEFAULT CURRENT_TIMESTAMP;

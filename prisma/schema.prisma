@@ -5,13 +5,12 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
   output   = "../generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model UrlEntry {
@@ -19,4 +18,65 @@ model UrlEntry {
   originalUrl String
   slug        String   @unique @default(cuid())
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+
+  User   User?   @relation(fields: [userId], references: [id])
+  userId BigInt?
+}
+
+model User {
+  id        BigInt   @id @default(autoincrement())
+  login     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  groups     Group[]
+  urlEntries UrlEntry[]
+}
+
+model Group {
+  id        BigInt   @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  users       User[]
+  permissions Permission[]
+}
+
+model Permission {
+  id        BigInt   @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  groups Group[]
+
+  module   Module @relation(fields: [moduleId], references: [id])
+  moduleId BigInt
+
+  operation   Operation @relation(fields: [operationId], references: [id])
+  operationId BigInt
+
+  @@unique([moduleId, operationId])
+}
+
+model Module {
+  id        BigInt   @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  permissions Permission[]
+}
+
+model Operation {
+  id        BigInt   @id @default(autoincrement())
+  read      Boolean
+  save      Boolean
+  delete    Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  permissions Permission[]
 }

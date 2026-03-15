@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 
-import { z } from 'zod';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -24,38 +23,31 @@ import {
 } from '@/components/ui/form';
 
 import { performRequest } from '@/lib/api';
-
-const formSchema = z.object({
-    url: z.url({
-        protocol: /^https?$/,
-        hostname: z.regexes.domain,
-    }),
-    slug: z.string().max(32),
-});
-
-type ShortUrlFormData = z.infer<typeof formSchema>;
-
-type ShortUrlResponse = { message: string; url: string };
+import {
+    shortenUrlSchema,
+    type ShortenUrlFormData,
+    type ShortenUrlSuccess,
+} from './definitions';
 
 export function CreateShortUrlForm() {
     const [loading, setLoading] = useState(false);
     const [shortenedUrl, setShortenedUrl] = useState<string | undefined>(
         undefined
     );
-    const form = useForm<ShortUrlFormData>({
-        resolver: zodResolver(formSchema),
+    const form = useForm<ShortenUrlFormData>({
+        resolver: zodResolver(shortenUrlSchema),
         defaultValues: {
             url: '',
             slug: '',
         },
     });
 
-    const onSubmit = async (formData: ShortUrlFormData) => {
+    const onSubmit = async (formData: ShortenUrlFormData) => {
         setLoading(true);
 
         const response = await performRequest<
-            ShortUrlFormData,
-            ShortUrlResponse
+            ShortenUrlFormData,
+            ShortenUrlSuccess
         >('/api/url-entry', 'POST', formData);
 
         if (response.status === 'success') {
@@ -80,7 +72,7 @@ export function CreateShortUrlForm() {
     };
 
     return (
-        <div className='flex h-64 w-5/6 flex-col gap-y-8 md:w-3/5 lg:w-4/12'>
+        <div className='flex h-64 w-5/6 flex-col gap-y-8 md:w-[45vw] lg:w-[35vw]'>
             <Form {...form}>
                 <form
                     className='flex flex-col items-center gap-y-2'
@@ -102,6 +94,7 @@ export function CreateShortUrlForm() {
                             </FormItem>
                         )}
                     />
+
                     <FormField
                         control={form.control}
                         name='slug'
@@ -118,6 +111,7 @@ export function CreateShortUrlForm() {
                             </FormItem>
                         )}
                     />
+
                     <Button
                         className='w-1/2 cursor-pointer'
                         variant='default'
