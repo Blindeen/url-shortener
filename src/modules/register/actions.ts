@@ -73,9 +73,4 @@ export async function registerUser(
     const jwtToken = signJwt(newUserWithGroups);
     await setAuthCookie(jwtToken);
     redirect('/', RedirectType.replace);
-
-    return {
-        status: 'success',
-        data: { message: 'User registered successfully' },
-    };
 }
